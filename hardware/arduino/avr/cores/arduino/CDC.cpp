@@ -228,9 +228,16 @@ size_t Serial_::write(const uint8_t *buffer, size_t size)
 // where the port is configured (lineState != 0) but not quite opened.
 Serial_::operator bool() {
 	bool result = false;
+	static bool oldResult = false;
+	
 	if (_usbLineInfo.lineState > 0) 
 		result = true;
-	delay(10);
+	
+	if (!oldResult && result)
+		delay(10);
+
+	oldResult = result;
+	
 	return result;
 }
 
